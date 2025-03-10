@@ -53,3 +53,42 @@ y = x**2 + 2*x + 1
 y.backward() #computes the derivative
 print("Derivative of y with respect to x:", x.grad)
 
+import torch
+import torch.nn as nn
+import torch.optim as optim
+
+# Define a simple neural network
+class SimpleNet(nn.Module):
+    def __init__(self):
+        super(SimpleNet, self).__init__()
+        self.fc1 = nn.Linear(2, 5)
+        self.fc2 = nn.Linear(5, 1)
+
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = torch.sigmoid(self.fc2(x))
+        return x
+
+# Instantiate the network
+net = SimpleNet()
+
+# Define loss function and optimizer
+criterion = nn.BCELoss() #Binary Cross Entropy Loss
+optimizer = optim.Adam(net.parameters(), lr=0.01)
+
+# Example training data
+inputs = torch.tensor([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
+targets = torch.tensor([[0.0], [1.0], [1.0]])
+
+# Training loop
+for epoch in range(100):
+    optimizer.zero_grad()
+    outputs = net(inputs)
+    loss = criterion(outputs, targets)
+    loss.backward()
+    optimizer.step()
+
+    if (epoch + 1) % 10 == 0:
+        print(f"Epoch {epoch+1}, Loss: {loss.item()}")
+
+print("Trained model outputs:", net(inputs))
