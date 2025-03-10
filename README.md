@@ -27,3 +27,29 @@ You can install PyTorch using `pip` or `conda`. For specific installation instru
 
 ```bash
 pip install torch torchvision torchaudio
+
+import torch
+
+# Create a tensor
+x = torch.tensor([[1, 2], [3, 4]])
+print("Tensor x:", x)
+
+# Perform operations
+y = x + 2
+print("Tensor y (x + 2):", y)
+
+# GPU usage (if available)
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+    x_gpu = x.to(device)
+    y_gpu = x_gpu * 2
+    print("Tensor y_gpu (x * 2 on GPU):", y_gpu)
+else:
+    print("CUDA is not available.")
+
+# Automatic differentiation
+x = torch.tensor(2.0, requires_grad=True)
+y = x**2 + 2*x + 1
+y.backward() #computes the derivative
+print("Derivative of y with respect to x:", x.grad)
+
